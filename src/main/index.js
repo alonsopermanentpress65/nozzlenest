@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, session, net, protocol } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, session, net, protocol, dialog } from 'electron'
 import { join, extname, dirname } from 'path'
 import crypto from 'crypto'
 import fs from 'fs'
@@ -12,6 +12,22 @@ import { fsApi } from './fsApi'
 protocol.registerSchemesAsPrivileged([
   { scheme: 'media', privileges: { standard: true, secure: true, supportFetchAPI: true, bypassCSP: true, corsEnabled: true } }
 ])
+
+// Global unhandled exception catcher
+process.on('uncaughtException', (error) => {
+  console.error('Fatal unhandled exception:', error)
+  const result = dialog.showMessageBoxSync({
+    type: 'error',
+    title: 'NozzleNest - Fatal Error',
+    message: 'A fatal error occurred and the app must close.',
+    detail: `${error.message}\n\n${error.stack || ''}`,
+    buttons: ['Report on GitHub', 'Close App']
+  })
+  if (result === 0) {
+    shell.openExternal('https://github.com/papakonnekt/nozzlenest/issues/new')
+  }
+  app.exit(1)
+})
 
 let mainWindow = null
 const activeDownloads = new Map()
@@ -685,6 +701,34 @@ app.whenReady().then(() => {
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
+  })
+
+  // Crash Reporting for Renderer Processes
+  app.on('render-process-gone', (event, webContents, details) => {
+    if (details.reason !== 'clean-exit' && details.reason !== 'killed') {
+      dialog.showMessageBox({
+        type: 'error',
+        title: 'NozzleNest - Process Crashed',
+        message: 'The main rendering process has crashed.',
+        detail: `Reason: ${details.reason}`,
+        buttons: ['Report on GitHub', 'Restart App', 'Close']
+      }).then((result) => {
+        if (result.response === 0) {
+          shell.openExternal('https://github.com/papakonnekt/nozzlenest/issues/new')
+        } else if (result.response === 1) {
+          app.relaunch()
+          app.exit(0)
+        } else {
+          app.exit(0)
+        }
+      })
+    }
+  })
+
+  app.on('child-process-gone', (event, details) => {
+    if (details.reason !== 'clean-exit' && details.reason !== 'killed') {
+      console.error('Child process crashed:', details)
+    }
   })
 
   // Initialize SQLite and folders
