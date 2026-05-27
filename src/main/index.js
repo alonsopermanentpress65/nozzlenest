@@ -1,4 +1,5 @@
 import { app, shell, BrowserWindow, ipcMain, session, net, protocol, dialog } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import { join, extname, dirname } from 'path'
 import crypto from 'crypto'
 import fs from 'fs'
@@ -738,6 +739,11 @@ app.whenReady().then(() => {
     // Also set download path on the persistent browser partition
     const browserPartition = session.fromPartition('persist:nozzlenest-browser', { cache: true })
     browserPartition.setDownloadPath(libraryPath)
+  }
+
+  // Check for auto updates
+  if (app.isPackaged) {
+    autoUpdater.checkForUpdatesAndNotify()
   }
 
   registerIpcHandlers()

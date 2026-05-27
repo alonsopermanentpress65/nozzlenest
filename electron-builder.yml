@@ -19,8 +19,12 @@ files:
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
 asarUnpack:
   - resources/**
+  - "**/better-sqlite3/**/*.node"
 win:
   executableName: nozzlenest
+  companyName: "papakonnekt"
+  copyright: "Copyright © 2026 papakonnekt"
+  fileDescription: "NozzleNest 3D Print File Organizer"
   icon: resources/icon.png
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
