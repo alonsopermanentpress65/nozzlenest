@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Color Palette — NozzleNest Navy/Violet Theme (matched to logo) */
+
+  /* Logo background is ~#0c0e1a (deep navy). We shift bg slightly to match. */
+  --bg-primary: #0c0e1a;
+  --bg-secondary: #111320;
+  --bg-tertiary: #181b2e;
+
+  /* Primary accent: logo's electric violet border glow */
+  --accent-purple: #9b5cf6;
+  --accent-purple-glow: rgba(155, 92, 246, 0.45);
+  --accent-purple-hover: #b47afa;
+
+  /* Secondary accent: logo's steel/ice blue inner hexagon */
+  --accent-cyan: #4da8e0;
+  --accent-cyan-glow: rgba(77, 168, 224, 0.4);
+  --accent-cyan-hover: #72bfe8;
+
+  /* Logo copper/bronze bird accent — used sparingly for warmth */
+  --accent-copper: #c8834a;
+  --accent-copper-glow: rgba(200, 131, 74, 0.35);
+
+  --accent-green: #10b981;
+  --accent-green-glow: rgba(16, 185, 129, 0.15);
+  --accent-red: #ef4444;
+  --accent-red-glow: rgba(239, 68, 68, 0.15);
+  --accent-yellow: #f59e0b;
+  --accent-yellow-glow: rgba(245, 158, 11, 0.15);
+
+  /* Borders & Solids — tinted navy-blue instead of pure grey */
+  --border-glass: rgba(100, 120, 200, 0.08);
+  --border-glass-bright: rgba(155, 92, 246, 0.25);
+  --bg-glass: rgba(14, 16, 32, 0.65);
+  --bg-glass-bright: rgba(22, 26, 46, 0.75);
+
+  /* Shadows & Glows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.7);
+  --glow-purple: 0 0 24px var(--accent-purple-glow);
+  --glow-cyan: 0 0 20px var(--accent-cyan-glow);
+
+  /* Typography Colors */
+  --text-primary: #ededed;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-dark: #000000;
+
+  /* Sizing and Transitions */
+  --sidebar-width: 250px;
+  --header-height: 70px;
+  --transition-fast: 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --transition-normal: 0.2s cubic-bezier(0.2, 0, 0, 1);
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  line-height: 1.5;
+  font-family: 'Orbitron', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden; /* Desktop app shell scrolling is managed per view */
+}
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+  transition: var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Interactive Resets */
+button, input, select, textarea {
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  user-select: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Input Fields Common Style */
+.input-field {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: var(--transition-fast);
+}
+
+.input-field:focus {
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 0 1px var(--accent-purple);
+  background: var(--bg-tertiary);
+}
+
+/* Dropdown/Select Common Style */
+.select-field {
+  padding: 10px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.select-field:focus {
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 0 1px var(--accent-purple);
+}
+
+/* Scrollable Container Utility */
+.scrollable {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
