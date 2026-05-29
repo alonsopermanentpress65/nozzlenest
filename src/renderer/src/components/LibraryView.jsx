@@ -170,6 +170,9 @@ export default function LibraryView({ onQueueChanged, completedDownloadModelId }
             const settings = await window.api.db.getSettings()
             const res = await window.api.fs.savePreviewImage(settings.libraryPath, modelNeedsThumb.id, base64)
             if (res) {
+              // Update the database so it knows the thumbnail exists and stops looping
+              await window.api.db.updateModel(modelNeedsThumb.id, { preview_image_path: res })
+              
               // Reload models quietly to inject the new preview path
               const filters = {
                 search: searchQuery || undefined,

@@ -16,7 +16,7 @@ import { generateSTLThumbnail } from '../utils/thumbnailGenerator'
 export default function AddModelView({ setActiveTab, initialFile, onClearInitialFile }) {
   const [importQueue, setImportQueue] = useState([])
   const [isScanning, setIsScanning] = useState(false)
-  const [libraryPath, setLibraryPath] = useState('C:\\NozzleNest')
+  const [libraryPath, setLibraryPath] = useState('')
   const [activeTempDirs, setActiveTempDirs] = useState([])
   const [availableTags, setAvailableTags] = useState([])
 
@@ -271,7 +271,7 @@ export default function AddModelView({ setActiveTab, initialFile, onClearInitial
     setIsScanning(true)
     try {
       const settings = await window.api.db.getSettings()
-      const libPath = settings ? settings.libraryPath : 'C:\\NozzleNest'
+      const libPath = settings ? settings.libraryPath : libraryPath
 
       for (const item of itemsToImport) {
         // 1. Save base database record
@@ -339,17 +339,13 @@ export default function AddModelView({ setActiveTab, initialFile, onClearInitial
         // 5. Generate and save preview image (if applicable)
         try {
           if (item.ext === 'stl' || item.ext === '3mf') {
-            console.log(`[Import] Generating 3D preview for ${item.fileName}...`)
-            const previewBase64 = await generateSTLThumbnail(copiedPath)
-            if (previewBase64) {
-              const previewPath = await window.api.fs.savePreviewImage(libPath, modelId, previewBase64)
-              if (previewPath) {
-                await window.api.db.updateModel(modelId, { preview_image_path: previewPath })
-              }
-            }
+            // DEFERRED: Thumbnail generation is now handled lazily by the background
+            // auto-generator in LibraryView.jsx to prevent WebGL context exhaustion
+            // and UI freezing during large batch imports.
+            console.log(`[Import] Thumbnail generation deferred for ${item.fileName}`)
           }
         } catch (previewErr) {
-          console.warn('[Import] Failed to generate local preview thumbnail', previewErr)
+          console.warn('[Import] Failed to handle local preview thumbnail deferral', previewErr)
         }
       }
 

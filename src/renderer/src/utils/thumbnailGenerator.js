@@ -2,6 +2,17 @@ import * as THREE from 'three'
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader'
 import { ThreeMFLoader } from 'three/examples/jsm/loaders/3MFLoader'
 
+let sharedRenderer = null
+
+const getRenderer = (width, height) => {
+  if (!sharedRenderer) {
+    sharedRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, preserveDrawingBuffer: true })
+  }
+  sharedRenderer.setSize(width, height)
+  sharedRenderer.setPixelRatio(1)
+  return sharedRenderer
+}
+
 export const generateSTLThumbnail = async (filePath, width = 500, height = 350) => {
   return new Promise((resolve) => {
     try {
@@ -11,9 +22,7 @@ export const generateSTLThumbnail = async (filePath, width = 500, height = 350) 
 
       const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
       
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, preserveDrawingBuffer: true })
-      renderer.setSize(width, height)
-      renderer.setPixelRatio(1) // Keep it simple and fast for thumbnails
+      const renderer = getRenderer(width, height)
       
       // Lighting
       const ambientLight = new THREE.AmbientLight('#1d1d2b', 1.5)
@@ -84,8 +93,7 @@ export const generateSTLThumbnail = async (filePath, width = 500, height = 350) 
           const base64 = renderer.domElement.toDataURL('image/jpeg', 0.9)
           
           // Cleanup memory
-          renderer.dispose()
-          renderer.forceContextLoss()
+          renderer.clear()
           if (fileExt === '3mf') {
             object3D.traverse((child) => {
               if (child.isMesh) {
@@ -103,8 +111,7 @@ export const generateSTLThumbnail = async (filePath, width = 500, height = 350) 
         undefined,
         (err) => {
           console.error('[thumbnailGenerator] Loader error:', err)
-          renderer.dispose()
-          renderer.forceContextLoss()
+          renderer.clear()
           resolve(null)
         }
       )

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FolderOpen, Save, CheckCircle2, ShieldAlert, RefreshCw, AlertCircle } from 'lucide-react'
 
 export default function SettingsView() {
-  const [libraryPath, setLibraryPath] = useState('C:\\NozzleNest')
+  const [libraryPath, setLibraryPath] = useState('')
   const [slicerPath, setSlicerPath] = useState('')
   const [savedStatus, setSavedStatus] = useState(null) // 'success' or 'error'
   const [updateInfo, setUpdateInfo] = useState(null)
@@ -152,7 +152,7 @@ export default function SettingsView() {
               id="input-settings-library-path"
               value={libraryPath} 
               readOnly 
-              placeholder="e.g. C:\NozzleNest"
+              placeholder="e.g. ~/Documents/NozzleNest"
             />
             <button 
               className="btn-secondary" 

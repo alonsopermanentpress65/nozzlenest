@@ -4,7 +4,8 @@ import { join, dirname } from 'path'
 import fs from 'fs'
 
 let db = null
-let libraryPath = 'C:\\NozzleNest'
+import os from 'os'
+let libraryPath = join(os.homedir(), 'Documents', 'NozzleNest')
 let slicerPath = ''
 
 // Load settings from Electron app userData directory

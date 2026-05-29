@@ -136,7 +136,10 @@ export const fsApi = {
 
     if (customSlicerPath) {
       // Open with custom slicer path
-      const command = `"${customSlicerPath}" "${filePath}"`
+      let command = `"${customSlicerPath}" "${filePath}"`
+      if (process.platform === 'darwin' && customSlicerPath.endsWith('.app')) {
+        command = `open -a "${customSlicerPath}" "${filePath}"`
+      }
       exec(command, (error) => {
         if (error) {
           console.error('Failed to launch custom slicer:', error)
@@ -388,36 +391,49 @@ export const fsApi = {
     return false
   },
 
-  // Auto-detect slicer executables
   detectSlicers: async () => {
-    const pathsToSearch = [
-      process.env.PROGRAMFILES,
-      process.env['PROGRAMFILES(X86)'],
-      join(process.env.LOCALAPPDATA || '', 'Programs')
-    ].filter(Boolean)
-
-    const knownSlicers = [
-      { name: 'Bambu Studio', exe: 'bambu-studio.exe', subDir: 'Bambu Studio' },
-      { name: 'Orca Slicer', exe: 'orca-slicer.exe', subDir: 'OrcaSlicer' },
-      { name: 'Prusa Slicer', exe: 'prusa-slicer.exe', subDir: 'Prusa3D\\PrusaSlicer' },
-      { name: 'UltiMaker Cura', exe: 'Cura.exe', subDir: 'UltiMaker Cura' }
-    ]
-
     const foundSlicers = []
 
-    for (const base of pathsToSearch) {
-      for (const slicer of knownSlicers) {
-        const fullPath = join(base, slicer.subDir, slicer.exe)
-        if (fs.existsSync(fullPath)) {
-          // Avoid duplicates if found in multiple Program Files via junction
-          if (!foundSlicers.find(s => s.path === fullPath)) {
-            foundSlicers.push({
-              name: slicer.name,
-              path: fullPath
-            })
+    if (process.platform === 'win32') {
+      const pathsToSearch = [
+        process.env.PROGRAMFILES,
+        process.env['PROGRAMFILES(X86)'],
+        join(process.env.LOCALAPPDATA || '', 'Programs')
+      ].filter(Boolean)
+
+      const knownSlicers = [
+        { name: 'Bambu Studio', exe: 'bambu-studio.exe', subDir: 'Bambu Studio' },
+        { name: 'Orca Slicer', exe: 'orca-slicer.exe', subDir: 'OrcaSlicer' },
+        { name: 'Prusa Slicer', exe: 'prusa-slicer.exe', subDir: 'Prusa3D\\PrusaSlicer' },
+        { name: 'UltiMaker Cura', exe: 'Cura.exe', subDir: 'UltiMaker Cura' }
+      ]
+
+      for (const base of pathsToSearch) {
+        for (const slicer of knownSlicers) {
+          const fullPath = join(base, slicer.subDir, slicer.exe)
+          if (fs.existsSync(fullPath)) {
+            if (!foundSlicers.find(s => s.path === fullPath)) {
+              foundSlicers.push({ name: slicer.name, path: fullPath })
+            }
           }
         }
       }
+    } else if (process.platform === 'darwin') {
+      const knownMacApps = [
+        { name: 'Bambu Studio', app: 'BambuStudio.app' },
+        { name: 'Orca Slicer', app: 'OrcaSlicer.app' },
+        { name: 'Prusa Slicer', app: 'PrusaSlicer.app' },
+        { name: 'UltiMaker Cura', app: 'UltiMaker Cura.app' }
+      ]
+      for (const slicer of knownMacApps) {
+        const fullPath = join('/Applications', slicer.app)
+        if (fs.existsSync(fullPath)) {
+          foundSlicers.push({ name: slicer.name, path: fullPath })
+        }
+      }
+    } else if (process.platform === 'linux') {
+      // Linux has highly fragmented install paths (AppImage, Flatpak, Snap).
+      // We return an empty array to encourage users to manually browse for their executable.
     }
     
     return foundSlicers
